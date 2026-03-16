@@ -48,4 +48,18 @@ public class Grafo {
 
         return cont;
     }
+        
+    public void imprime_adjacencias() {
+        for (int i = 0; i < tamanho; i++) {
+            System.out.println(i + "->");
+
+            Aresta atual = lista[i];
+
+            while (atual.proximo != null) {
+                System.out.println(atual.proximo);
+                atual = atual.proximo;
+            }
+            System.out.println();
+        }
+    }
 }
