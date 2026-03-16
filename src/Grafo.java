@@ -33,4 +33,19 @@ public class Grafo {
         }
     }
 
+    public int adjacentes(int i, int[] adj) {
+        int cont = 0;
+
+        if (i >= 0 && i < tamanho) {
+            Aresta atual = lista[i];
+
+            while (atual != null) {
+                adj[cont] = atual.destino;
+                cont++;
+                atual = atual.proximo;
+            }
+        }
+
+        return cont;
+    }
 }
