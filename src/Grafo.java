@@ -48,7 +48,7 @@ public class Grafo {
 
         return cont;
     }
-        
+
     public void imprime_adjacencias() {
         for (int i = 0; i < tamanho; i++) {
             System.out.println(i + "->");
@@ -60,6 +60,11 @@ public class Grafo {
                 atual = atual.proximo;
             }
             System.out.println();
+        }
+    }
+    public void seta_informacao(int i, String V) {
+        if (i >= 0 && i < tamanho) {
+            vertices[i] = V;
         }
     }
 }

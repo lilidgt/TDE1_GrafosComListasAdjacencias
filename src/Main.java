@@ -3,6 +3,12 @@ public class Main {
 
         Grafo g = new Grafo(5);
 
+        g.seta_informacao(0, "A");
+        g.seta_informacao(2, "C");
+
+        System.out.println("Vértice 0: " + g.vertices[0]);
+        System.out.println("Vértice 2: " + g.vertices[2]);
+
         g.cria_adjacencia(0, 1, 2.5);
         g.cria_adjacencia(0, 2, 1.8);
         g.cria_adjacencia(1, 3, 3.0);
