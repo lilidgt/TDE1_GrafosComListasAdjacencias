@@ -51,12 +51,10 @@ public class Grafo {
 
     public void imprime_adjacencias() {
         for (int i = 0; i < tamanho; i++) {
-            System.out.println(i + "->");
-
+            System.out.print(i + " (" + vertices[i] + ") -> ");
             Aresta atual = lista[i];
-
-            while (atual.proximo != null) {
-                System.out.println(atual.proximo);
+            while (atual != null) {
+                System.out.print("[destino: " + atual.destino + ", peso: " + atual.peso + "] ");
                 atual = atual.proximo;
             }
             System.out.println();
