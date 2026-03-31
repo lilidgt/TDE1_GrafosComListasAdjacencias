@@ -1,11 +1,11 @@
 public class Aresta {
-    public int destino;
-    public double peso;
-    public Aresta proximo;
+    public int verticeDestino; // índice do vértice para onde esta aresta aponta
+    public double peso; // custo/peso da aresta
+    public Aresta proximaAresta; // próxima aresta na lista encadeada
 
-    public Aresta(int destino, double peso) {
-        this.destino = destino;
+    public Aresta(int verticeDestino, double peso) {
+        this.verticeDestino = verticeDestino;
         this.peso = peso;
-        this.proximo = null;
+        this.proximaAresta = null;
     }
 }

@@ -1,46 +1,42 @@
 public class Main {
     public static void main(String[] args) {
 
-        //cria grafo
-        Grafo g = new Grafo(5);
+        // cria o grafo com 5 vértices
+        Grafo grafo = new Grafo(5);
 
-        //seta infos (rótulos dos vértices)
-        g.seta_informacao(0, "A");
-        g.seta_informacao(1, "B");
-        g.seta_informacao(2, "C");
-        g.seta_informacao(3, "D");
-        g.seta_informacao(4, "E");
+        // define os rótulos de cada vértice
+        grafo.seta_informacao(0, "A");
+        grafo.seta_informacao(1, "B");
+        grafo.seta_informacao(2, "C");
+        grafo.seta_informacao(3, "D");
+        grafo.seta_informacao(4, "E");
 
-        //cria adjac
-        g.cria_adjacencia(0, 1, 2.5);
-        g.cria_adjacencia(0, 2, 1.8);
-        g.cria_adjacencia(1, 3, 3.0);
-        g.cria_adjacencia(2, 4, 4.2);
+        // cria as arestas (origem, destino, peso)
+        grafo.cria_adjacencia(0, 1, 2.5); // A -> B
+        grafo.cria_adjacencia(0, 2, 1.8); // A -> C
+        grafo.cria_adjacencia(1, 3, 3.0); // B -> D
+        grafo.cria_adjacencia(2, 4, 4.2); // C -> E
 
-        //imprime grafo
-        System.out.println("--Grafo inicial--");
-        g.imprime_adjacencias();
+        // imprime o grafo inicial
+        System.out.println("-- Grafo inicial --");
+        grafo.imprime_adjacencias();
 
-        //teste adjac
-        int[] adj = new int[5];
-        int quantidade = g.adjacentes(0, adj);
+        // lista os vértices adjacentes ao vértice 0 (A)
+        int[] vizinhosDeA    = new int[5];
+        int quantidadeVizinhos = grafo.adjacentes(0, vizinhosDeA);
 
-        System.out.println("\nAdjacentes do vértice 0:");
-        for (int k = 0; k < quantidade; k++) {
-            System.out.println(adj[k]);
+        System.out.println("\nAdjacentes do vértice 0 (A):");
+        for (int indice = 0; indice < quantidadeVizinhos; indice++) {
+            System.out.println(vizinhosDeA[indice]);
         }
 
-        //remove uma aresta
-        g.remove_adjacencia(0, 2);
+        // testa Warshall e Dijkstra com o grafo completo
+        grafo.imprime_warshall();
+        grafo.dijkstra(0);
 
-        //imprime dnv
-        System.out.println("\n--Grafo dps da Remoção (0 -> 1)--");
-        g.imprime_adjacencias();
-
-        // testa Warshall
-        g.imprime_warshall();
-
-        // testa Dijkstra a partir do vértice 0 (A)
-        g.dijkstra(0);
+        // remove a aresta A -> C e imprime o grafo atualizado
+        grafo.remove_adjacencia(0, 2);
+        System.out.println("\n-- Grafo após remoção da aresta A -> C --");
+        grafo.imprime_adjacencias();
     }
 }
