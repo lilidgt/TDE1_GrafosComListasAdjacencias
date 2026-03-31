@@ -31,10 +31,16 @@ public class Main {
         }
 
         //remove uma aresta
-        g.remove_adjacencia(0, 1);
+        g.remove_adjacencia(0, 2);
 
         //imprime dnv
         System.out.println("\n--Grafo dps da Remoção (0 -> 1)--");
         g.imprime_adjacencias();
+
+        // testa Warshall
+        g.imprime_warshall();
+
+        // testa Dijkstra a partir do vértice 0 (A)
+        g.dijkstra(0);
     }
 }
