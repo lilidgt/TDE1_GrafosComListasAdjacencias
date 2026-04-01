@@ -1,7 +1,7 @@
 public class Grafo {
-    private Aresta[] listaDeAdjacencias; // cada posição aponta para a lista encadeada de arestas daquele vértice
-    public String[] rotulosVertices;     // rótulo/nome de cada vértice
-    public int totalVertices;            // quantidade de vértices no grafo
+    private Aresta[] listaDeAdjacencias; // cd posi aponta p lista encadeada de arestas daquele vértice
+    public String[] rotulosVertices;
+    public int totalVertices; // q tem no grafo
 
     public Grafo(int totalVertices) {
         this.totalVertices = totalVertices;
@@ -9,7 +9,7 @@ public class Grafo {
         this.rotulosVertices = new String[totalVertices];
     }
 
-    // cria uma aresta direcionada de 'verticeOrigem' para 'verticeDestino' com o peso dado
+    // origem -> destino cm peso
     public void cria_adjacencia(int verticeOrigem, int verticeDestino, double peso) {
         boolean origemValida  = verticeOrigem  >= 0 && verticeOrigem  < totalVertices;
         boolean destinoValido = verticeDestino >= 0 && verticeDestino < totalVertices;
@@ -21,23 +21,23 @@ public class Grafo {
         }
     }
 
-    // remove a aresta que vai de 'verticeOrigem' para 'verticeDestino'
+    // origem -> destino
     public void remove_adjacencia(int verticeOrigem, int verticeDestino) {
         boolean origemValida      = verticeOrigem >= 0 && verticeOrigem < totalVertices;
         boolean listaNaoVazia     = listaDeAdjacencias[verticeOrigem] != null;
 
         if (origemValida && listaNaoVazia) {
-            // caso especial: a aresta a remover é a primeira da lista
+            // primeira da lista
             if (listaDeAdjacencias[verticeOrigem].verticeDestino == verticeDestino) {
                 listaDeAdjacencias[verticeOrigem] = listaDeAdjacencias[verticeOrigem].proximaAresta;
             } else {
-                // percorre a lista até encontrar a aresta anterior à que será removida
+                // percorre até achar aresta anterior
                 Aresta arestaAtual = listaDeAdjacencias[verticeOrigem];
                 while (arestaAtual.proximaAresta != null &&
                         arestaAtual.proximaAresta.verticeDestino != verticeDestino) {
                     arestaAtual = arestaAtual.proximaAresta;
                 }
-                // desliga a aresta encontrada da lista
+                // tira aresta encontrada da list
                 if (arestaAtual.proximaAresta != null) {
                     arestaAtual.proximaAresta = arestaAtual.proximaAresta.proximaAresta;
                 }
@@ -45,7 +45,6 @@ public class Grafo {
         }
     }
 
-    // preenche o vetor 'vizinhos' com os índices dos vértices adjacentes a 'vertice'
     // retorna a quantidade de adjacentes encontrados
     public int adjacentes(int vertice, int[] vizinhos) {
         int quantidadeVizinhos = 0;
@@ -61,12 +60,12 @@ public class Grafo {
         return quantidadeVizinhos;
     }
 
-    // imprime todas as arestas do grafo no formato: índice (rótulo) -> [destino, peso]
     public void imprime_adjacencias() {
         for (int vertice = 0; vertice < totalVertices; vertice++) {
             System.out.print(vertice + " (" + rotulosVertices[vertice] + ") -> ");
             Aresta arestaAtual = listaDeAdjacencias[vertice];
             while (arestaAtual != null) {
+                // índice (rótulo) -> [destino, peso]
                 System.out.print("[destino: " + arestaAtual.verticeDestino + ", peso: " + arestaAtual.peso + "] ");
                 arestaAtual = arestaAtual.proximaAresta;
             }
@@ -74,23 +73,20 @@ public class Grafo {
         }
     }
 
-    // define o rótulo (nome) de um vértice
+    // dfn nome
     public void seta_informacao(int vertice, String rotulo) {
         if (vertice >= 0 && vertice < totalVertices) {
             rotulosVertices[vertice] = rotulo;
         }
     }
 
-    // ── Warshall ─────────────────────────────────────────────────────────────
-
-    // calcula a matriz de alcançabilidade:
-    // matrizAlcancavel[i][j] == true significa que existe algum caminho de i até j
+    // se true, tem caminho :p
     public boolean[][] warshall() {
         boolean[][] matrizAlcancavel = new boolean[totalVertices][totalVertices];
 
-        // passo 1: marca as arestas diretas que já existem no grafo
+        // marca arestas diretas q ja tem no grafo
         for (int vertice = 0; vertice < totalVertices; vertice++) {
-            matrizAlcancavel[vertice][vertice] = true; // todo vértice alcança a si mesmo
+            matrizAlcancavel[vertice][vertice] = true; // o vértice alcança ele msm smpre né
             Aresta arestaAtual = listaDeAdjacencias[vertice];
             while (arestaAtual != null) {
                 matrizAlcancavel[vertice][arestaAtual.verticeDestino] = true;
@@ -98,12 +94,12 @@ public class Grafo {
             }
         }
 
-        // passo 2: para cada vértice intermediário possível,
-        // verifica se ele cria novos caminhos entre outros pares de vértices
+        // p cada vértice intermediário possível,
+        // verifica se cria novos caminhos entre outros pares de vértices
         for (int intermediario = 0; intermediario < totalVertices; intermediario++) {
             for (int origem = 0; origem < totalVertices; origem++) {
                 for (int destino = 0; destino < totalVertices; destino++) {
-                    // se consigo ir de 'origem' até 'intermediario'
+                    // se da p ir origem -> intermediario
                     // E de 'intermediario' até 'destino',
                     // então consigo ir de 'origem' até 'destino'
                     if (matrizAlcancavel[origem][intermediario] && matrizAlcancavel[intermediario][destino]) {
@@ -116,13 +112,12 @@ public class Grafo {
         return matrizAlcancavel;
     }
 
-    // imprime a matriz de alcançabilidade com os rótulos dos vértices
     public void imprime_warshall() {
         boolean[][] matrizAlcancavel = warshall();
 
         System.out.println("\n-- Matriz de Alcançabilidade (Warshall) --");
 
-        // cabeçalho com os rótulos das colunas
+        // cabeçalho com rótulosd das colunas
         System.out.print("     ");
         for (int coluna = 0; coluna < totalVertices; coluna++) {
             System.out.printf("%4s", rotulosVertices[coluna]);
@@ -139,47 +134,45 @@ public class Grafo {
         }
     }
 
-    // ── Dijkstra ─────────────────────────────────────────────────────────────
-
-    // calcula o menor caminho do vértice 'origem' até todos os outros vértices
-    // retorna o vetor de menores distâncias (Double.MAX_VALUE = inalcançável)
+    // menor caminho do vértice 'origem' até todos os outros vértices
+    // return do vetor de menores dists (Double.MAX_VALUE = inalcançável)
     public double[] dijkstra(int origem) {
-        double[] menorDistancia  = new double[totalVertices];  // menor custo conhecido até cada vértice
-        boolean[] jaVisitado     = new boolean[totalVertices]; // vértices já processados
-        int[] verticeAnterior    = new int[totalVertices];     // usado para reconstruir o caminho
+        double[] menorDistancia = new double[totalVertices];
+        boolean[] jaVisitado = new boolean[totalVertices]; // v ja visto
+        int[] verticeAnterior = new int[totalVertices]; // p reconstruir caminho
 
-        // inicializa: distância infinita para todos, exceto a origem
+        // dist infinita (-origem)
         for (int vertice = 0; vertice < totalVertices; vertice++) {
             menorDistancia[vertice] = Double.MAX_VALUE;
-            jaVisitado[vertice]     = false;
+            jaVisitado[vertice] = false;
             verticeAnterior[vertice] = -1;
         }
         menorDistancia[origem] = 0.0;
 
         for (int passo = 0; passo < totalVertices; passo++) {
-
-            // escolhe o vértice ainda não visitado com a menor distância conhecida
             int verticeMaisProximo = -1;
             for (int vertice = 0; vertice < totalVertices; vertice++) {
-                if (!jaVisitado[vertice] &&
-                        (verticeMaisProximo == -1 || menorDistancia[vertice] < menorDistancia[verticeMaisProximo])) {
+                //n visitado com menor dist
+                if (!jaVisitado[vertice] && (verticeMaisProximo == -1 ||
+                        menorDistancia[vertice] < menorDistancia[verticeMaisProximo])
+                ) {
                     verticeMaisProximo = vertice;
                 }
             }
 
-            // se não sobrou vértice alcançável, encerra
-            if (verticeMaisProximo == -1 || menorDistancia[verticeMaisProximo] == Double.MAX_VALUE) break;
+            if (verticeMaisProximo == -1 || menorDistancia[verticeMaisProximo] == Double.MAX_VALUE)
+                break;
 
             jaVisitado[verticeMaisProximo] = true;
 
-            // relaxamento: verifica se passar por 'verticeMaisProximo' melhora o caminho para os vizinhos
+            // verifica se passar por verticeMaisProximo melhora o caminho para os vizinhos
             Aresta arestaAtual = listaDeAdjacencias[verticeMaisProximo];
             while (arestaAtual != null) {
-                int vizinho          = arestaAtual.verticeDestino;
+                int vizinho = arestaAtual.verticeDestino;
                 double distanciaViaAtual = menorDistancia[verticeMaisProximo] + arestaAtual.peso;
 
                 if (!jaVisitado[vizinho] && distanciaViaAtual < menorDistancia[vizinho]) {
-                    menorDistancia[vizinho]   = distanciaViaAtual;
+                    menorDistancia[vizinho] = distanciaViaAtual;
                     verticeAnterior[vizinho]  = verticeMaisProximo;
                 }
                 arestaAtual = arestaAtual.proximaAresta;
@@ -202,8 +195,8 @@ public class Grafo {
         return menorDistancia;
     }
 
-    // auxiliar recursivo: imprime o caminho completo até o vértice 'vertice'
-    // usando o vetor 'verticeAnterior' para voltar até a origem
+    // recursivo: imprime até o vértice
+    // voltar até origem -> verticeAnterior
     private void imprimeCaminho(int[] verticeAnterior, int vertice) {
         if (verticeAnterior[vertice] == -1) {
             System.out.print(rotulosVertices[vertice]); // chegou na origem, imprime e para
